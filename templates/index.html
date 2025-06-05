@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rutinas de Gimnasio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Lista de Usuarios</h1>
+    <ul>
+        {% for user in users %}
+            <li>{{ user.name }} - {{ user.email }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Registrar Nuevo Usuario</h2>
+    <form action="/register_user" method="POST">
+        <label>Nombre:</label>
+        <input type="text" name="name" required placeholder="Ingrese su nombre" title="Nombre completo">
+        <label>Email:</label>
+        <input type="email" name="email" required placeholder="Ingrese su correo electrónico" title="Correo electrónico">
+        <label>Contraseña:</label>
+        <input type="password" name="password" required placeholder="Ingrese una contraseña" title="Contraseña">
+        <button type="submit">Registrar Usuario</button>
+    </form>
+
+    <h2>Ejercicios Registrados</h2>
+    <table>
+        <tr>
+            <th>Usuario</th>
+            <th>Ejercicio</th>
+            <th>Repeticiones</th>
+            <th>Peso</th>
+        </tr>
+        {% for exercise in exercises %}
+        <tr>
+            <td>{{ exercise.user_id }}</td>
+            <td>{{ exercise.name }}</td>
+            <td>{{ exercise.repetitions }}</td>
+            <td>{{ exercise.weight }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Registrar Nuevo Ejercicio</h2>
+    <form action="/register_exercise" method="POST">
+        <label>ID Usuario:</label>
+        <input type="number" name="user_id" required placeholder="Ingrese el ID del usuario" title="ID del usuario">
+        <label>Ejercicio:</label>
+        <input type="text" name="name" required placeholder="Ingrese el nombre del ejercicio" title="Nombre del ejercicio">
+        <label>Repeticiones:</label>
+        <input type="number" name="repetitions" required placeholder="Ingrese el número de repeticiones" title="Repeticiones">
+        <label>Peso (kg):</label>
+        <input type="number" name="weight" required placeholder="Ingrese el peso en kg" title="Peso en kilogramos">
+        <button type="submit">Agregar Ejercicio</button>
+    </form>
+</body>
+</html>
