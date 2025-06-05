@@ -15,9 +15,8 @@ function Header() {
         </div>
       </nav>
       <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-        ☰
+        {menuOpen ? "✖" : "☰"}
       </button>
-
     </header>
   );
 }
