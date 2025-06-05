@@ -8,11 +8,9 @@
 </head>
 <body>
     <h1>Lista de Usuarios</h1>
-    <ul>
-        {% for user in users %}
+    <ul>{% for user in users %}
             <li>{{ user.name }} - {{ user.email }}</li>
-        {% endfor %}
-    </ul>
+        {% endfor %}</ul>
 
     <h2>Registrar Nuevo Usuario</h2>
     <form action="/register_user" method="POST">
