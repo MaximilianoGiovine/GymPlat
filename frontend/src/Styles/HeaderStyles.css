@@ -52,7 +52,7 @@
   height: 44px;
   align-items: center;
   justify-content: center;
-  margin-left: 12px;
+  margin-left: auto; /* <-- Esto lo alinea a la derecha */
   outline: none;
   z-index: 1100;
 }
@@ -67,9 +67,10 @@
   .menu-toggle {
     display: flex;
     z-index: 1101;
+    margin-left: auto; /* <-- Asegura alineación derecha en mobile */
   }
   .botonesNav {
-    display: none;
+    display: flex;
     flex-direction: column;
     position: absolute;
     top: 60px;
@@ -79,16 +80,17 @@
     border-radius: 14px;
     width: 210px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-    transition: opacity 0.3s, transform 0.3s;
     opacity: 0;
-    transform: scale(0.95);
+    transform: translateY(-20px) scale(0.95);
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(.4,0,.2,1), transform 0.35s cubic-bezier(.4,0,.2,1);
     z-index: 1100;
     gap: 10px;
   }
   .botonesNav.open {
-    display: flex;
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
   }
   .botonesNav a {
     width: 100%;
