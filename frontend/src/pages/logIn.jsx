@@ -33,15 +33,6 @@ const LogIn = () => {
         }
     };
 
-    const fetchData = async () => {
-        const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:5000/dashboard_data', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        // Manejar la respuesta de fetch aquí
-    };
 
     return (
         <div className="LogInContainer">
