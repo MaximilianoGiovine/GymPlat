@@ -1,8 +1,14 @@
 from flask import render_template, Blueprint, request, jsonify, redirect
 from database import db
 from models import User, Exercise, Routine
+from werkzeug.security import generate_password_hash, check_password_hash
+import jwt
+import datetime
+from functools import wraps
 
 routes = Blueprint('routes', __name__)
+
+SECRET_KEY = "tu_clave_secreta"  # Usa una clave secreta fuerte y guárdala segura
 
 @routes.route('/')
 def main_page():
@@ -61,7 +67,8 @@ def register_user():
     if existing_user:
         return jsonify({"error": "El usuario ya existe"}), 400
 
-    new_user = User(name=name, email=email, password=password)
+    hashed_password = generate_password_hash(password)
+    new_user = User(name=name, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
 
@@ -87,3 +94,45 @@ def register_exercise():
     db.session.commit()
 
     return jsonify({"message": "Ejercicio registrado correctamente"}), 201
+
+@routes.route('/login_user', methods=['POST'])
+def login_user():
+    """Iniciar sesión de usuario"""
+    if request.content_type == 'application/json':
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
+    else:
+        return jsonify({"error": "Formato de solicitud no soportado"}), 415
+
+    user = User.query.filter_by(email=email).first()
+    if user and check_password_hash(user.password, password):
+        token = jwt.encode({
+            'user_id': user.id,
+            'name': user.name,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=2)  # Expira en 2 horas
+        }, SECRET_KEY, algorithm='HS256')
+        return jsonify({"message": "Login exitoso", "token": token, "name": user.name}), 200
+    return jsonify({"error": "Credenciales incorrectas"}), 401
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization'].split(" ")[1]
+        if not token:
+            return jsonify({'error': 'Token es requerido'}), 401
+        try:
+            data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            current_user = User.query.get(data['user_id'])
+        except Exception as e:
+            return jsonify({'error': 'Token inválido o expirado'}), 401
+        return f(current_user, *args, **kwargs)
+    return decorated
+
+# Ejemplo de uso:
+@routes.route('/dashboard_data', methods=['GET'])
+@token_required
+def dashboard_data(current_user):
+    return jsonify({"message": f"Bienvenido {current_user.name}!"})

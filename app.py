@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS  # Importar CORS
 from routes_App import routes
 from database import db  # Importación desde el nuevo archivo
 import config  # Archivo opcional para configuración
@@ -6,6 +7,8 @@ import config  # Archivo opcional para configuración
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///gym.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+CORS(app)  # Habilitar CORS en toda la aplicación
 
 db.init_app(app)
 
