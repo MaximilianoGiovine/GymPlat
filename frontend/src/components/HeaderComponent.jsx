@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 
 import "../Styles/HeaderStyles.css";
 function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem('token');
 

@@ -5,6 +5,22 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <meta name="msapplication-navbutton-color" content="#000000" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script>
+      (function() {
+        function setThemeColor() {
+          var themeColor = window.matchMedia('(prefers-color-scheme: dark)').matches ? '#000000' : '#ffffff';
+          var metaTag = document.querySelector('meta[name="theme-color"]');
+          if (metaTag) {
+            metaTag.setAttribute('content', themeColor);
+          }
+        }
+        setThemeColor();
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setThemeColor);
+      })();
+    </script>
+    <meta name="msapplication-TileColor" content="#000000" />
     <meta
       name="description"
       content="Web site created using create-react-app"
